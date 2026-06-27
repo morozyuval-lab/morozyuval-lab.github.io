@@ -221,7 +221,7 @@
 
   /* ── 7. Filter pills ──────────────────────────────────────── */
   /* ★ EDIT TAG ORDER → change this array */
-  const tagOrder = ['All', 'Shorts', 'AI', 'Brand', 'Motion', 'Product Marketing', 'Employer Branding', 'RTM'];
+  const tagOrder = ['All', 'Shorts', 'AI', 'Brand', 'Motion', 'Product Marketing', 'Employer Branding', 'RTM', 'Events'];
   const filterBar = document.getElementById('filter-bar');
 
   tagOrder.forEach(tag => {
