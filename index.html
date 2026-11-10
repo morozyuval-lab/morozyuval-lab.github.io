@@ -1,174 +1,441 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yuval Moroz - Creative Full Stack</title>
-  <meta name="description" content="Creative Full Stack - video, motion, AI, brand, and product marketing.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Yuval Moroz - Creative Full Stack</title>
+<meta name="description" content="Yuval Moroz, Creative Full Stack. Writing, design, video, product and data.">
+<meta name="theme-color" content="#f4f4f1">
+<meta property="og:title" content="Yuval Moroz - Creative Full Stack">
+<meta property="og:description" content="Put your finger down if you're good at...">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://morozyuval-lab.github.io/">
+<meta property="og:image" content="https://morozyuval-lab.github.io/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://morozyuval-lab.github.io/og-image.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23ff3b1f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one scroll story. Hands count skills, a portrait says who, then a quiet filterable library of the work. */
+:root{
+  --paper:#f4f4f1; --ink:#121212; --mute:#6a6862; --line:#dcdbd5; --rec:#ff3b1f; --card:#e7e6e0;
+  --pop1:#ffd84d; --pop2:#ff9bbd; --pop3:#8fd0ff; --pop4:#b4ee95; --pop5:#cdb8ff; --pop6:#ffb07a;
+  --display:"Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --serif:"Instrument Serif", Georgia, serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font-family:var(--display);font-size:15px;-webkit-font-smoothing:antialiased}
+.gut{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+@media (min-width:900px){.gut{padding-left:max(48px, env(safe-area-inset-left, 0px));padding-right:max(48px, env(safe-area-inset-right, 0px))}}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--rec);outline-offset:3px}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.it{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--rec)}
 
-  <!-- ── Theme ───────────────────────────────────────────────── -->
-  <meta name="theme-color" content="#000000">
+/* Loader */
+#loader{position:fixed;inset:0;z-index:100;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:transform .9s cubic-bezier(.77,0,.18,1)}
+#loader.out{transform:translateY(-100%)}
+#tc{font-family:var(--mono);font-size:clamp(34px,7vw,84px);letter-spacing:-.02em;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:.35em}
+#tc .dot{width:.28em;height:.28em;animation:blink 1s steps(2) infinite}
+#type{font-weight:500;font-size:clamp(44px,8vw,120px);letter-spacing:-.045em;display:flex;align-items:center;min-height:1.2em}
+#type .caret{display:inline-block;width:.06em;height:.9em;margin-left:.06em;background:var(--ink);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
 
-  <!-- ── Open Graph ──────────────────────────────────────────── -->
-  <meta property="og:title" content="Yuval Moroz - Creative Full Stack">
-  <meta property="og:description" content="From strategy to final cut. Just helping ideas find their way into the world.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://yuvalmoroz.com">
-  <meta property="og:image" content="https://yuvalmoroz.com/og-image.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
+/* Nav */
+nav{position:fixed;top:env(safe-area-inset-top, 0px);left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding-block:20px}
+nav .brand{display:flex;align-items:center;gap:10px;font-weight:600;text-decoration:none}
+nav .links{display:flex;gap:24px;font-size:14px}
+nav .links a{text-decoration:none}
+#sound{position:fixed;right:max(16px, env(safe-area-inset-right, 0px));bottom:calc(16px + env(safe-area-inset-bottom, 0px));z-index:60;display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:9px 14px;cursor:pointer}
+.bars{display:flex;gap:2px;align-items:flex-end;height:12px}
+.bars i{width:2px;background:var(--ink);height:3px}
+#sound.on .bars i{animation:eq .9s ease-in-out infinite}
+#sound.on .bars i:nth-child(2){animation-delay:-.3s}#sound.on .bars i:nth-child(3){animation-delay:-.6s}#sound.on .bars i:nth-child(4){animation-delay:-.15s}
+@keyframes eq{0%,100%{height:3px}50%{height:12px}}
 
-  <!-- ── Twitter / X ─────────────────────────────────────────── -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Yuval Moroz - Creative Full Stack">
-  <meta name="twitter:description" content="From strategy to final cut.">
-  <meta name="twitter:image" content="https://yuvalmoroz.com/og-image.png">
+/* Fingers (opening) */
+.fingers{position:relative;height:700vh}
+.stick{position:sticky;top:0;height:100vh;overflow:hidden}
+.fingers .stick{display:flex;flex-direction:column;align-items:center;gap:1vh;padding-top:84px;padding-bottom:24px}
+.fingers h1{margin:0;text-align:center;font-weight:500;font-size:clamp(34px,5.4vw,88px);line-height:.92;letter-spacing:-.045em;text-wrap:balance;max-width:16ch;position:relative;z-index:3}
+.handwrap{position:relative;width:100%;flex:1;min-height:0;display:flex;justify-content:center;align-items:center;overflow:hidden}
+.frames{flex:none}
+.frames{position:relative;width:100%;aspect-ratio:1920/1097}
+.frames canvas{position:absolute;inset:0;width:100%;height:100%;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 22%,#000 80%,transparent 100%),linear-gradient(to right,transparent 0,#000 16%,#000 84%,transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to bottom,transparent 0,#000 22%,#000 80%,transparent 100%),linear-gradient(to right,transparent 0,#000 16%,#000 84%,transparent 100%);
+  mask-composite:intersect}
+.pop{position:absolute;left:0;top:0;z-index:2;white-space:nowrap;padding:10px 18px;border-radius:999px;font-size:clamp(16px,1.7vw,24px);font-weight:500;letter-spacing:-.01em;pointer-events:none;color:var(--ink);box-shadow:0 8px 24px rgba(0,0,0,.08);animation:pop .5s cubic-bezier(.3,1.6,.4,1) both}
+.pop.gone{animation:gone .25s ease-in both}
+@keyframes pop{0%{transform:translate(-50%,-100%) scale(0) rotate(var(--r))}100%{transform:translate(-50%,-125%) scale(1) rotate(var(--r))}}
+@keyframes gone{to{transform:translate(-50%,-140%) scale(.6) rotate(var(--r));opacity:0}}
+.hint{color:var(--mute);transition:opacity .3s}
 
-  <!-- ── Favicon ─────────────────────────────────────────────── -->
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.svg">
+/* That's me */
+.me{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:6vw;align-items:center;padding-block:18vh}
+.portrait{aspect-ratio:4/5;max-width:100%;border-radius:14px;background:var(--card);display:flex;align-items:center;justify-content:center;color:var(--mute);overflow:hidden;transform:rotate(-2deg)}
+.portrait img{width:100%;height:100%;object-fit:cover;object-position:50% 15%}
+.me p + p{margin-top:14px}
+.me .kicker{display:block;margin-bottom:18px;color:var(--mute);font-size:14px}
+.me h2{margin:0 0 28px;font-weight:500;font-size:clamp(56px,9vw,150px);line-height:.88;letter-spacing:-.05em}
+.me p{margin:0;font-size:clamp(18px,1.8vw,24px);line-height:1.35;max-width:30ch}
+.me .tag{margin-top:22px;font-family:var(--serif);font-style:italic;font-size:clamp(22px,2.2vw,30px)}
+@media (max-width:760px){.me{grid-template-columns:1fr}.portrait{max-width:320px}}
 
-  <!-- ── Fonts ───────────────────────────────────────────────── -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+/* Work library */
+.work{padding-block:8vh 12vh;display:flex;flex-direction:column;gap:28px}
+.work-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+.work-head h2{margin:0;font-weight:500;font-size:clamp(36px,4.8vw,76px);letter-spacing:-.045em;line-height:.95;max-width:16ch;text-wrap:balance}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:transparent;border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip span{opacity:.5;margin-left:6px;font-family:var(--mono);font-size:11px}
+.grid{columns:4 250px;column-gap:16px}
+.item{break-inside:avoid;margin:0 0 22px;display:flex;flex-direction:column;gap:10px;text-decoration:none;cursor:pointer;width:100%;background:none;border:0;padding:0;text-align:left}
+.item[hidden]{display:none}
+.thumb{position:relative;width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:var(--card)}
+.item.short .thumb{aspect-ratio:9/16}
+.item.square .thumb{aspect-ratio:1/1}
+.thumb img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.1,1)}
+.thumb .ph{position:absolute;inset:0;display:flex;align-items:flex-end;padding:14px;font-family:var(--serif);font-style:italic;font-size:26px;line-height:1}
+.item:hover .thumb img{transform:scale(1.05)}
+.item .t{font-weight:500;font-size:16px;letter-spacing:-.01em}
+.item .r{color:var(--mute)}
+.item .tg{display:flex;flex-wrap:wrap;gap:6px}
+.item .tg span{font-family:var(--mono);font-size:10px;border:1px solid var(--line);border-radius:999px;padding:3px 8px;color:var(--mute)}
 
-  <link rel="stylesheet" href="style.css">
+.badge{position:absolute;z-index:2;top:10px;left:10px;display:flex;align-items:center;gap:6px;background:rgba(244,244,241,.92);color:var(--ink);border-radius:999px;padding:5px 10px 5px 8px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+.badge svg{width:12px;height:12px;flex:0 0 12px}
+.badge.gif{background:var(--pop1)}
+.formats{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.formats .lab{color:var(--mute);margin-right:4px}
+
+/* Modal */
+#modal{position:fixed;inset:0;z-index:80;background:rgba(244,244,241,.94);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:24px}
+#modal .box{width:min(1100px,100%);display:flex;flex-direction:column;gap:14px}
+#modal.short .box{width:min(380px,100%)}
+#modal .vid{aspect-ratio:16/9;max-width:100%;background:var(--ink);border-radius:12px;overflow:hidden}
+#modal.short .vid{aspect-ratio:9/16}
+#modal iframe{width:100%;height:100%;border:0}
+#modal .bar{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:baseline}
+#close{position:absolute;top:calc(20px + env(safe-area-inset-top, 0px));right:max(20px, env(safe-area-inset-right, 0px))}
+
+/* Contact */
+.contact{padding-block:10vh 48px;display:flex;flex-direction:column;gap:40px;border-top:1px solid var(--line)}
+.contact h2{margin:0;font-weight:500;font-size:clamp(64px,14vw,230px);letter-spacing:-.055em;line-height:.85}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.mail{font-size:clamp(18px,2vw,26px);user-select:all;margin-right:8px}
+.pill{border:1px solid var(--ink);background:transparent;border-radius:999px;padding:11px 20px;cursor:pointer;font-size:14px;text-decoration:none}
+footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:20px 72px;color:var(--mute)}
+
+/* Cursor */
+#cur{position:fixed;left:0;top:0;z-index:90;pointer-events:none;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#fff;mix-blend-mode:difference;display:flex;align-items:center;justify-content:center;transition:width .35s cubic-bezier(.2,.8,.2,1),height .35s cubic-bezier(.2,.8,.2,1),margin .35s cubic-bezier(.2,.8,.2,1)}
+#cur span{font-family:var(--mono);font-size:11px;color:#000;opacity:0;transition:opacity .2s;letter-spacing:.06em}
+#cur.big{width:80px;height:80px;margin:-40px 0 0 -40px}
+#cur.big span{opacity:1}
+@media (hover:hover) and (pointer:fine){body,a,button{cursor:none}}
+@media (hover:none){#cur{display:none}}
+@media (prefers-reduced-motion:reduce){#tc .dot,.pop{animation:none}.f{transition:none}}
+</style>
+<style>html,body{margin:0}img{max-width:100%}</style>
 </head>
 <body>
 
-  <!-- ── Nav ──────────────────────────────────────────────── -->
-  <nav id="nav">
-    <a class="nav-logo" href="#hero" id="nav-name">Yuval Moroz</a>
-    <ul class="nav-links">
-      <li><a href="#work">Work</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
-      <svg width="20" height="14" viewBox="0 0 20 14" fill="none">
-        <rect width="20" height="1.5" rx="0.75" fill="currentColor"/>
-        <rect y="6.25" width="20" height="1.5" rx="0.75" fill="currentColor"/>
-        <rect y="12.5" width="20" height="1.5" rx="0.75" fill="currentColor"/>
-      </svg>
-    </button>
-  </nav>
 
-  <!-- ── Mobile Menu ───────────────────────────────────────── -->
-  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
-    <button class="mobile-menu-close" id="mobile-menu-close" aria-label="Close menu">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <line x1="18" y1="6" x2="6" y2="18"/>
-        <line x1="6" y1="6" x2="18" y2="18"/>
-      </svg>
-    </button>
-    <nav class="mobile-menu-nav">
-      <a href="#work"    class="mobile-menu-link">Work</a>
-      <a href="#about"   class="mobile-menu-link">About</a>
-      <a href="#contact" class="mobile-menu-link">Contact</a>
-    </nav>
-  </div>
+<div id="loader" aria-label="Loading">
+  <div id="type" aria-label="Yuval Moroz"><span id="typed"></span><span class="caret" aria-hidden="true"></span></div>
+</div>
 
-  <!-- ── Hero ─────────────────────────────────────────────── -->
-  <section id="hero">
-    <h1 class="hero-name" id="hero-name">Yuval Moroz</h1>
-    <p class="hero-title" id="hero-title"></p>
-    <div class="hero-sub-row">
-      <p class="hero-sub" id="hero-sub"></p>
-      <a class="hero-cta" href="#work">
-        Enough talking.
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <line x1="12" y1="5" x2="12" y2="19"/>
-          <polyline points="19 12 12 19 5 12"/>
-        </svg>
-      </a>
+<nav class="gut" aria-label="Main">
+  <a class="brand" href="#top">Yuval Moroz</a>
+  <div class="links"><a href="#me">About</a><a href="#work">Work</a><a href="#contact">Contact</a></div>
+</nav>
+<div id="cur" aria-hidden="true"><span id="curLab">Play</span></div>
+
+<main id="top">
+  <section class="fingers" id="fingers">
+    <div class="stick gut">
+      <h1>Put your finger down if you're <span class="it">good at</span></h1>
+      <div class="handwrap" id="handwrap"><div class="frames" id="frames"></div></div>
+      <span class="mono hint" id="hint">Scroll</span>
     </div>
   </section>
 
-  <!-- ── Work ─────────────────────────────────────────────── -->
-  <section id="work">
-    <div class="filter-bar-wrapper">
-      <div class="filter-row-wrap">
-        <div class="filter-bar" id="filter-bar"></div>
-      </div>
-    </div>
-    <div class="gallery-grid" id="gallery-grid"></div>
-  </section>
-
-  <!-- ── About ────────────────────────────────────────────── -->
-  <section id="about">
-    <div class="about-block">
-      <p class="block-label">About</p>
-      <p class="block-prose" id="about-text"></p>
-    </div>
-    <div class="about-block">
-      <p class="block-label block-label--casual">put your finger down if you're good at:</p>
-      <p class="block-practice" id="skills-list"></p>
-    </div>
-    <div class="about-block">
-      <p class="block-label">Say hello</p>
-      <p class="block-links">
-        <a class="block-link js-email" href="#">Email</a><span class="block-dot">·</span><a class="block-link js-linkedin" href="#" target="_blank" rel="noopener">LinkedIn</a><span class="block-dot">·</span><a class="block-link js-phone" href="#">Phone</a>
-      </p>
+  <section class="me gut" id="me">
+    <div class="portrait" id="portrait"><img src="images/yuval.jpg" alt="Yuval Moroz"></div>
+    <div>
+      <h2>Hi, I'm <span class="it">Yuval!</span></h2>
+      <p>I think of myself as a <span class="it">Creative Full Stack.</span></p>
+      <p>I love jumping between writing, design, video, product and data. When an idea needs something I don't know yet, I go and learn it.</p>
+      <p>But it always starts in the same place: a question, a random connection in my head, and the wish to make something people actually feel.</p>
+      <div class="tag">What a time to be alive, right?</div>
     </div>
   </section>
 
-  <!-- ── Contact ──────────────────────────────────────────── -->
-  <section id="contact">
-    <p class="contact-label">Get in touch</p>
-    <h2 class="contact-headline" id="contact-headline"></h2>
-    <p class="contact-sub" id="contact-sub"></p>
-    <div class="contact-buttons">
-      <a class="btn btn-primary js-linkedin" href="#" target="_blank" rel="noopener">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/>
-          <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
-        </svg>
-        LinkedIn
-      </a>
-      <a class="btn btn-secondary js-email" href="#">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="2" y="4" width="20" height="16" rx="2"/>
-          <polyline points="22,4 12,13 2,4"/>
-        </svg>
-        Email
-      </a>
-      <a class="btn btn-secondary js-phone" href="#">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.5 19.79 19.79 0 011.07 2 2 2 0 013 .18h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L7.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/>
-        </svg>
-        Phone
-      </a>
-    </div>
+  <section class="work gut" id="work">
+    <div class="work-head"><h2>Take a closer look at my <span class="it">recent work</span></h2><span class="mono" id="count"></span></div>
+    <div class="filters" id="filters" role="group" aria-label="Filter work by topic"></div>
+    <div class="formats" id="formats" role="group" aria-label="Filter work by format"><span class="mono lab">Format</span></div>
+    <div class="grid" id="grid"></div>
   </section>
 
-  <!-- ── Footer ───────────────────────────────────────────── -->
-  <footer>
-    <span id="footer-name"></span>
-    <span class="footer-tagline">Mostly human. Occasionally AI.</span>
-    <span>© <span id="footer-year"></span></span>
-  </footer>
-
-  <!-- ── Modal ────────────────────────────────────────────── -->
-  <div id="modal-overlay" role="dialog" aria-modal="true" aria-label="Video player">
-    <div class="modal-inner landscape" id="modal-inner">
-      <div class="modal-video-wrap landscape-ratio" id="modal-video-wrap"></div>
-      <div class="modal-meta">
-        <div>
-          <div class="modal-title" id="modal-title"></div>
-          <div class="modal-role"  id="modal-role"></div>
-        </div>
-        <button class="modal-close" id="modal-close" aria-label="Close">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </button>
-      </div>
+  <section class="contact gut" id="contact">
+    <h2>Say <span class="it">hello.</span></h2>
+    <div class="row">
+      <span class="mail" id="mail">morozyuval@gmail.com</span>
+      <button class="pill" id="copy" data-cursor="Copy">Copy email</button>
+      <a class="pill" href="https://www.linkedin.com/in/yuval-moroz-553936208/" target="_blank" rel="noopener" data-cursor="Open">LinkedIn</a>
+      <a class="pill" id="ig" href="https://www.instagram.com/yuvalmoroz/" target="_blank" rel="noopener" data-cursor="Open">Instagram</a>
     </div>
-  </div>
+  </section>
+  <footer class="gut"><span class="mono">© 2026 Yuval Moroz</span><span class="mono">Made with love (and a lot of credits)</span></footer>
+</main>
 
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+<div id="modal" hidden role="dialog" aria-modal="true" aria-label="Project">
+  <button class="pill" id="close" data-cursor="Close">Close</button>
+  <div class="box"><div class="vid" id="vid"></div><div class="bar"><b id="mt" style="font-weight:500;font-size:20px"></b><span class="mono" id="mr" style="color:var(--mute)"></span></div><a class="mono" id="ml" href="#" target="_blank" rel="noopener">Open the original</a></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+// Portfolio items live in data.js (const projects). Mapped here to the fields this page uses.
+const PROJECTS = (typeof projects !== 'undefined' ? projects : []).map(p => ({
+  t: p.title, tags: p.tags || [], role: p.role || '', url: p.url, yt: p.ytId, drive: p.driveId,
+  img: p.img, ar: p.ar, short: p.isShort ? 1 : 0, square: p.isSquare ? 1 : 0, li: p.type === 'linkedin-post' ? 1 : 0
+}));
+(() => {
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = (s) => document.querySelector(s);
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const pad = (n) => String(n).padStart(2,'0');
+
+/* ---------- Sound: on by default; browsers unlock audio at the first click, tap or key ---------- */
+let ctx = null, soundOn = true;
+function ensureCtx(){ if(!ctx){ try{ ctx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } if(ctx && ctx.state === 'suspended') ctx.resume().catch(()=>{}); return ctx; }
+['pointerdown','keydown','touchstart'].forEach(ev => addEventListener(ev, () => { if(soundOn) ensureCtx(); }, { once:true, passive:true }));
+try { ensureCtx(); } catch(e) {}
+const live = () => soundOn && ctx && ctx.state === 'running';
+function blip(freq=1600, dur=.035, vol=.05, type='sine'){
+  if(!live()) return;
+  const t = ctx.currentTime, o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = type; o.frequency.setValueAtTime(freq, t); o.frequency.exponentialRampToValueAtTime(freq*.6, t+dur);
+  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0001, t+dur);
+  o.connect(g).connect(ctx.destination); o.start(t); o.stop(t+dur+.02);
+}
+// Click: a soft two-note ping. Typing: an iPhone-style key tick (a tiny filtered noise tap).
+function burst(dur, freq, q, v, delay){
+  const t = ctx.currentTime + delay, len = Math.floor(ctx.sampleRate*dur), b = ctx.createBuffer(1, len, ctx.sampleRate), d = b.getChannelData(0);
+  for(let i=0;i<len;i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/len, 5);
+  const n = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+  n.buffer = b; f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = q; g.gain.value = v;
+  n.connect(f).connect(g).connect(ctx.destination); n.start(t);
+}
+// Finger word: one round "bubble pop" per word.
+function popTone(){
+  if(!live()) return;
+  const t = ctx.currentTime, o = ctx.createOscillator(), g = ctx.createGain();
+  o.type = 'sine'; o.frequency.setValueAtTime(380, t); o.frequency.exponentialRampToValueAtTime(1100, t + .1);
+  g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.18, t + .005); g.gain.exponentialRampToValueAtTime(.0001, t + .12);
+  o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + .14);
+}
+// Click: "soft switch", a crisp tick then a low settle, like a light switch.
+function ping(){ if(!live()) return; burst(.012, 3200, 1, .5, 0); burst(.03, 900, 1.2, .35, .03); }
+let noiseBuf = null;
+function keyTick(){
+  if(!live()) return;
+  const t = ctx.currentTime;
+  if(!noiseBuf){ noiseBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate*.02), ctx.sampleRate); const d = noiseBuf.getChannelData(0); for(let i=0;i<d.length;i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/d.length, 6); }
+  const n = ctx.createBufferSource(), bp = ctx.createBiquadFilter(), g = ctx.createGain();
+  n.buffer = noiseBuf; bp.type = 'bandpass'; bp.frequency.value = 2600 + Math.random()*900; bp.Q.value = 1.4;
+  g.gain.value = .5; n.connect(bp).connect(g).connect(ctx.destination); n.start(t);
+  const o = ctx.createOscillator(), og = ctx.createGain();
+  o.frequency.setValueAtTime(1900, t); og.gain.setValueAtTime(.025, t); og.gain.exponentialRampToValueAtTime(.0001, t + .012);
+  o.connect(og).connect(ctx.destination); o.start(t); o.stop(t + .02);
+}
+
+/* ---------- Loader: runs, then cuts away by itself ---------- */
+// Loader: the name types itself, holds a beat, then cuts away.
+const NAME = 'Yuval Moroz';
+let ti = 0;
+function typeNext(){
+  ti++; $('#typed').textContent = NAME.slice(0, ti);
+  if(NAME[ti-1] !== ' ') keyTick();
+  if(ti < NAME.length) setTimeout(typeNext, reduce ? 0 : 75 + Math.random()*55);
+  else setTimeout(() => { $('#loader').classList.add('out'); setTimeout(() => { $('#loader').hidden = true; }, 950); }, reduce ? 200 : 650);
+}
+setTimeout(typeNext, reduce ? 0 : 450);
+
+/* ---------- Fingers ---------- */
+const skills = ['Video Production','Creative Direction','AI Creative','Brand Strategy','Product Marketing','Video Editing','Social Content','Paid Creative','Storytelling','Scripting'];
+const pops = ['--pop1','--pop2','--pop3','--pop4','--pop5','--pop6'];
+// Scroll-scrubbed sequence: seq/000.webp ... seq/299.webp, 30 frames per finger (10 fingers).
+const FRAME_W = 1920, FRAME_H = 1097, N_FRAMES = 300, PER = 30;
+// Tip of the finger that folds in step i+1, in frame coordinates (image-left hand first: thumb, index, middle, ring, pinky; then image-right hand).
+const tips = [[650,310],[516,84],[390,60],[320,114],[220,240],[696,316],[810,90],[904,60],[980,100],[1090,230]]
+  .map(([x,y]) => [(x - 16) * FRAME_W / 1344, y * FRAME_H / 768]);
+const framesEl = $('#frames'), wrap = $('#handwrap'), fingersSec = $('#fingers');
+const canvas = document.createElement('canvas'); canvas.setAttribute('role','img'); canvas.setAttribute('aria-label','Two hands raised, folding fingers one by one');
+framesEl.appendChild(canvas);
+const g = canvas.getContext('2d');
+const seq = Array.from({length:N_FRAMES}, (_,i) => { const im = new Image(); im.decoding = 'async'; im.src = `seq${Math.floor(i / 100) + 1}/${String(i).padStart(3,'0')}.webp`; return im; });
+let shown = -1;
+function sizeCanvas(){ const W = wrap.clientWidth, H = wrap.clientHeight, zoom = W < 760 ? 1.4 : 1, k = Math.min(W * zoom / FRAME_W, H / FRAME_H); framesEl.style.width = Math.floor(FRAME_W * k) + 'px'; framesEl.style.height = Math.floor(FRAME_H * k) + 'px'; const r = framesEl.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); canvas.width = Math.round(r.width * d); canvas.height = Math.round(r.height * d); shown = -1; }
+function draw(i){
+  // fall back to the nearest frame that has loaded
+  let j = i; while(j > 0 && !(seq[j].complete && seq[j].naturalWidth)) j--;
+  if(!(seq[j].complete && seq[j].naturalWidth)) return;
+  if(j === shown) return;
+  g.drawImage(seq[j], 0, 0, canvas.width, canvas.height); shown = j;
+}
+addEventListener('resize', sizeCanvas); sizeCanvas();
+seq[0].onload = () => draw(0);
+let lastDown = -1, popEl = null;
+function prog(el){ const r = el.getBoundingClientRect(); return clamp(-r.top / (r.height - innerHeight || 1)); }
+function tipPoint(i){
+  const fr = framesEl.getBoundingClientRect(), wr = wrap.getBoundingClientRect(), k = fr.width / FRAME_W;
+  return [fr.left - wr.left + tips[i][0] * k, fr.top - wr.top + tips[i][1] * k];
+}
+function showPop(i, withSound){
+  if(popEl){ const old = popEl; old.classList.add('gone'); setTimeout(() => old.remove(), 260); popEl = null; }
+  if(i < 0) return;
+  const [x, y] = tipPoint(i);
+  const el = document.createElement('div'); el.className = 'pop';
+  el.textContent = skills[i];
+  if(withSound) popTone();
+  el.style.left = Math.min(Math.max(x, 90), wrap.clientWidth - 90) + 'px'; el.style.top = Math.max(y, 74) + 'px';
+  el.style.background = `var(${pops[i % pops.length]})`; el.style.setProperty('--r', `${(i % 2 ? 1 : -1) * (3 + (i*7) % 6)}deg`);
+  wrap.appendChild(el); popEl = el;
+}
+function fingersFrame(){
+  const p = prog(fingersSec), f = Math.min(N_FRAMES - 1, Math.round(p * 1.04 * (N_FRAMES - 1)));
+  draw(f);
+  const down = Math.min(10, Math.floor((f + PER * 0.3) / PER));
+  if(down !== lastDown){
+    showPop(down - 1, down > lastDown && lastDown >= 0);
+    $('#hint').style.opacity = down === 0 ? 1 : 0;
+    lastDown = down;
+  }
+  requestAnimationFrame(fingersFrame);
+}
+requestAnimationFrame(fingersFrame);
+
+/* ---------- Work library ---------- */
+const order = ['All','Product Marketing','AI','Brand','Motion','RTM','Employer Branding','Events'];
+const ICON = {
+  Video:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="7 4 20 12 7 20"/></svg>',
+  Short:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><polygon points="10.5 9 14.5 12 10.5 15" fill="currentColor" stroke="none"/></svg>',
+  Image:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5-9 8"/></svg>',
+  GIF:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><polyline points="18 3 18 7 14 7"/><polyline points="6 21 6 17 10 17"/></svg>',
+  Carousel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M3 7v10M21 7v10"/></svg>'
+};
+function kindOf(p){
+  if(/carousel/i.test(p.t)) return 'Carousel';
+  if(/^Cortex - Ad/.test(p.t)) return 'GIF';
+  if(p.li) return /Duns 100/.test(p.t) ? 'Video' : 'Image';
+  return p.short ? 'Short' : 'Video';
+}
+const items = [...PROJECTS].reverse();
+const fills = ['#d7d3f2','#cfe0ea','#f0d3c3','#ece2b8','#d3e6d0'];
+const grid = $('#grid');
+items.forEach((p,i) => {
+  const b = document.createElement(p.li ? 'a' : 'button');
+  if(p.li){ b.href = p.url; b.target = '_blank'; b.rel = 'noopener'; }
+  b.className = 'item' + (p.short ? ' short' : '') + (p.square ? ' square' : '');
+  const kind = kindOf(p); b.dataset.kind = kind; b.dataset.tags = p.tags.join('|'); b.dataset.cursor = p.li ? 'Open' : kind === 'GIF' || kind === 'Image' || kind === 'Carousel' ? 'View' : 'Play';
+  // Video thumbs: maxres (true 16:9) first; hqdefault is 4:3 with black bars, so it is cropped to the video's own ratio,
+  // which for a Short leaves exactly the vertical frame. Images and Drive files keep their own ratio: nothing is cropped.
+  const src = p.img ? p.img : p.yt ? `https://i.ytimg.com/vi/${p.yt}/${p.short ? 'hqdefault' : 'maxresdefault'}.jpg` : p.drive ? `https://drive.google.com/thumbnail?id=${p.drive}&sz=w1000` : '';
+  b.innerHTML = `<div class="thumb" style="background:${fills[i % fills.length]}"><span class="badge ${kind === 'GIF' ? 'gif' : ''}">${ICON[kind]}${kind}</span><div class="ph"></div>${src ? `<img loading="lazy" alt="">` : ''}</div><div class="t"></div><div class="r mono"></div><div class="tg"></div>`;
+  b.querySelector('.ph').textContent = p.t; b.querySelector('.t').textContent = p.t; b.querySelector('.r').textContent = p.role;
+  b.querySelector('.tg').innerHTML = p.tags.map(t => `<span>${t}</span>`).join('');
+  const img = b.querySelector('img');
+  if(img){
+    img.alt = p.t;
+    const thumb = b.querySelector('.thumb');
+    img.onerror = () => { if(p.yt && !p.short && img.src.includes('maxres')) img.src = `https://i.ytimg.com/vi/${p.yt}/hqdefault.jpg`; else img.remove(); };
+    img.onload = () => {
+      if(p.yt && img.naturalWidth <= 120){ img.src = `https://i.ytimg.com/vi/${p.yt}/hqdefault.jpg`; return; }
+      if(!p.yt){ thumb.style.aspectRatio = `${img.naturalWidth} / ${img.naturalHeight}`; img.style.objectFit = 'contain'; }
+    };
+    if(p.ar) thumb.style.aspectRatio = p.ar;
+    img.src = src;
+  }
+  if(!p.li) b.addEventListener('click', () => open(p));
+  grid.appendChild(b);
+});
+const els = [...grid.children];
+let active = 'All';
+const filt = $('#filters');
+order.forEach(tag => {
+  const n = tag === 'All' ? items.length : items.filter(p => p.tags.includes(tag)).length;
+  if(!n) return;
+  const c = document.createElement('button'); c.className = 'chip'; c.setAttribute('aria-pressed', tag === active);
+  c.innerHTML = `${tag}<span>${n}</span>`;
+  c.addEventListener('click', () => { active = tag; filt.querySelectorAll('.chip').forEach(x => x.setAttribute('aria-pressed', x === c)); apply(); });
+  filt.appendChild(c);
+});
+let fmt = 'All';
+const fbox = $('#formats');
+['All','Video','Short','Image','GIF','Carousel'].forEach(k => {
+  const n = k === 'All' ? els.length : els.filter(e => e.dataset.kind === k).length; if(!n) return;
+  const c = document.createElement('button'); c.className = 'chip'; c.setAttribute('aria-pressed', k === fmt);
+  c.innerHTML = (k === 'All' ? 'All formats' : k + 's') + `<span>${n}</span>`;
+  c.addEventListener('click', () => { fmt = k; fbox.querySelectorAll('.chip').forEach(x => x.setAttribute('aria-pressed', x === c)); apply(); });
+  fbox.appendChild(c);
+});
+function apply(){
+  let n = 0;
+  els.forEach(el => { const show = (active === 'All' || el.dataset.tags.split('|').includes(active)) && (fmt === 'All' || el.dataset.kind === fmt); el.hidden = !show; if(show) n++; });
+  $('#count').textContent = `${n} projects`;
+}
+apply();
+
+/* ---------- Modal ---------- */
+const modal = $('#modal');
+function open(p){
+  if(p.li){ window.open(p.url, '_blank', 'noopener'); return; }
+  modal.classList.toggle('short', !!p.short);
+  const src = p.yt ? `https://www.youtube.com/embed/${p.yt}?autoplay=1&rel=0` : `https://drive.google.com/file/d/${p.drive}/preview`;
+  $('#vid').innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen title=""></iframe>`;
+  $('#vid iframe').title = p.t; $('#mt').textContent = p.t; $('#mr').textContent = p.role; $('#ml').href = p.url;
+  modal.hidden = false; document.body.style.overflow = 'hidden';
+}
+function close(){ modal.hidden = true; $('#vid').innerHTML = ''; document.body.style.overflow = ''; }
+$('#close').addEventListener('click', close);
+modal.addEventListener('click', e => { if(e.target === modal) close(); });
+addEventListener('keydown', e => { if(e.key === 'Escape' && !modal.hidden) close(); });
+
+/* ---------- Cursor ---------- */
+const cur = $('#cur'), curLab = $('#curLab'); let mx = -100, my = -100, cx = mx, cy = my;
+addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; });
+(function loop(){ cx = lerp(cx, mx, .22); cy = lerp(cy, my, .22); cur.style.transform = `translate(${cx}px,${cy}px)`; requestAnimationFrame(loop); })();
+document.addEventListener('pointerover', e => {
+  const t = e.target.closest('[data-cursor]');
+  if(t){ curLab.textContent = t.dataset.cursor; cur.classList.add('big'); }
+});
+document.addEventListener('pointerout', e => { const t = e.target.closest('[data-cursor]'); if(t && !t.contains(e.relatedTarget)) cur.classList.remove('big'); });
+document.addEventListener('click', e => { if(e.target.closest('a,button')) ping(); });
+
+/* ---------- Copy email ---------- */
+$('#copy').addEventListener('click', async () => {
+  const btn = $('#copy');
+  try { await navigator.clipboard.writeText($('#mail').textContent); btn.textContent = 'Copied'; }
+  catch(e){ const r = document.createRange(); r.selectNodeContents($('#mail')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Selected, press Cmd+C'; }
+  setTimeout(() => btn.textContent = 'Copy email', 1800);
+});
+})();
+</script>
+
 </body>
 </html>
