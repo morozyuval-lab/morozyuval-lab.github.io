@@ -50,7 +50,7 @@ button{font:inherit;color:inherit}
 @keyframes blink{50%{opacity:0}}
 
 /* Nav */
-nav{position:fixed;top:env(safe-area-inset-top, 0px);left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding-block:20px}
+nav{position:fixed;top:env(safe-area-inset-top, 0px);left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding-block:18px;background:rgba(244,244,241,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 nav .brand{display:flex;align-items:center;gap:10px;font-weight:600;text-decoration:none}
 nav .links{display:flex;gap:24px;font-size:14px}
 nav .links a{text-decoration:none}
@@ -101,6 +101,8 @@ nav .links a{text-decoration:none}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .chip span{opacity:.5;margin-left:6px;font-family:var(--mono);font-size:11px}
 .grid{columns:4 250px;column-gap:16px}
+.more-wrap{display:flex;justify-content:center;padding-top:8px}
+.more-wrap[hidden]{display:none}
 .item{break-inside:avoid;margin:0 0 22px;display:flex;flex-direction:column;gap:10px;text-decoration:none;cursor:pointer;width:100%;background:none;border:0;padding:0;text-align:left}
 .item[hidden]{display:none}
 .thumb{position:relative;width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:var(--card)}
@@ -187,6 +189,7 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
     <div class="filters" id="filters" role="group" aria-label="Filter work by topic"></div>
     <div class="formats" id="formats" role="group" aria-label="Filter work by format"><span class="mono lab">Format</span></div>
     <div class="grid" id="grid"></div>
+    <div class="more-wrap"><button class="pill" id="more" data-cursor="More"></button></div>
   </section>
 
   <section class="contact gut" id="contact">
@@ -400,11 +403,25 @@ const fbox = $('#formats');
   c.addEventListener('click', () => { fmt = k; fbox.querySelectorAll('.chip').forEach(x => x.setAttribute('aria-pressed', x === c)); apply(); });
   fbox.appendChild(c);
 });
+// Show about three rows first; "Show more" opens the rest. Changing a filter folds it back.
+let expanded = false, lastKey = '';
+function rowsLimit(){ const cols = Math.max(1, Math.min(4, Math.floor((grid.clientWidth + 16) / 266))); return cols === 1 ? 6 : cols * 3; }
 function apply(){
-  let n = 0;
-  els.forEach(el => { const show = (active === 'All' || el.dataset.tags.split('|').includes(active)) && (fmt === 'All' || el.dataset.kind === fmt); el.hidden = !show; if(show) n++; });
-  $('#count').textContent = `${n} projects`;
+  const key = active + '|' + fmt; if(key !== lastKey){ expanded = false; lastKey = key; }
+  const match = els.filter(el => (active === 'All' || el.dataset.tags.split('|').includes(active)) && (fmt === 'All' || el.dataset.kind === fmt));
+  const limit = rowsLimit();
+  els.forEach(el => { el.hidden = true; });
+  match.forEach((el, i) => { el.hidden = !expanded && i >= limit; });
+  $('#count').textContent = `${match.length} projects`;
+  const more = $('#more');
+  more.parentElement.hidden = match.length <= limit;
+  more.textContent = expanded ? 'Show less' : `Show more (${match.length - limit})`;
 }
+$('#more').addEventListener('click', () => {
+  expanded = !expanded; apply();
+  if(!expanded) $('#work').scrollIntoView({ behavior: 'smooth' });
+});
+addEventListener('resize', () => { if(!expanded) apply(); });
 apply();
 
 /* ---------- Modal ---------- */
