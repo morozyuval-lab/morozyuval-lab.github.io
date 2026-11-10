@@ -45,6 +45,13 @@
   function thumbUrl(ytId) {
     return `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`;
   }
+  function driveThumb(driveId) {
+    return `https://drive.google.com/thumbnail?id=${driveId}&sz=w1280`;
+  }
+  function driveThumbFallback(img) {
+    img.onerror = null;
+    img.remove();   /* leaves the dark thumb background + title */
+  }
   function thumbFallback(img, ytId) {
     img.onerror = null;
     img.src = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
@@ -53,7 +60,7 @@
 
   /* ── 5. Build a single card ───────────────────────────────── */
   function buildCard(item) {
-    const hasLink = !!(item.ytId || item.img);
+    const hasLink = !!(item.ytId || item.img || item.driveId);
     const card = document.createElement('div');
     card.className = 'card fade-up'
       + (item.isShort  ? ' is-short'  : '')
@@ -65,12 +72,13 @@
     const thumb = document.createElement('div');
     thumb.className = 'card-thumb';
 
-    if (item.ytId || item.img) {
+    if (hasLink) {
       const img = document.createElement('img');
-      img.src     = item.img ? item.img : thumbUrl(item.ytId);
+      img.src     = item.img ? item.img : item.driveId ? driveThumb(item.driveId) : thumbUrl(item.ytId);
       img.alt     = item.title;
       img.loading = 'lazy';
       if (item.ytId) img.onerror = () => thumbFallback(img, item.ytId);
+      else if (item.driveId) img.onerror = () => driveThumbFallback(img);
       thumb.appendChild(img);
 
       const overlay = document.createElement('div');
@@ -289,7 +297,9 @@
     modalVideoWrap.className = 'modal-video-wrap ' + (portrait ? 'portrait-ratio' : 'landscape-ratio');
 
     const iframe = document.createElement('iframe');
-    iframe.src   = `https://www.youtube.com/embed/${item.ytId}?autoplay=1&rel=0&modestbranding=1`;
+    iframe.src   = item.driveId
+      ? `https://drive.google.com/file/d/${item.driveId}/preview`
+      : `https://www.youtube.com/embed/${item.ytId}?autoplay=1&rel=0&modestbranding=1`;
     iframe.allow = 'autoplay; encrypted-media; fullscreen';
     iframe.allowFullscreen = true;
     modalVideoWrap.innerHTML = '';
