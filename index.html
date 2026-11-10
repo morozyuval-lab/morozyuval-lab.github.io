@@ -203,7 +203,7 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
 
 <div id="modal" hidden role="dialog" aria-modal="true" aria-label="Project">
   <button class="pill" id="close" data-cursor="Close">Close</button>
-  <div class="box"><div class="vid" id="vid"></div><div class="bar"><b id="mt" style="font-weight:500;font-size:20px"></b><span class="mono" id="mr" style="color:var(--mute)"></span></div><a class="mono" id="ml" href="#" target="_blank" rel="noopener">Open the original</a></div>
+  <div class="box"><div class="vid" id="vid"></div><div class="bar"><b id="mt" style="font-weight:500;font-size:20px"></b><span class="mono" id="mr" style="color:var(--mute)"></span></div></div>
 </div>
 
 <script src="data.js"></script>
@@ -250,7 +250,13 @@ function popTone(){
   o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + .14);
 }
 // Click: "soft switch", a crisp tick then a low settle, like a light switch.
-function ping(){ if(!live()) return; burst(.012, 3200, 1, .5, 0); burst(.03, 900, 1.2, .35, .03); }
+function ping(){
+  if(!soundOn) return;
+  ensureCtx();
+  const play = () => { burst(.012, 3200, 1, .5, 0); burst(.03, 900, 1.2, .35, .03); };
+  // the very first click also unlocks audio: wait for it, then play
+  if(ctx && ctx.state !== 'running') ctx.resume().then(play).catch(() => {}); else if(ctx) play();
+}
 let noiseBuf = null;
 function keyTick(){
   if(!live()) return;
@@ -408,7 +414,7 @@ function open(p){
   modal.classList.toggle('short', !!p.short);
   const src = p.yt ? `https://www.youtube.com/embed/${p.yt}?autoplay=1&rel=0` : `https://drive.google.com/file/d/${p.drive}/preview`;
   $('#vid').innerHTML = `<iframe src="${src}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen title=""></iframe>`;
-  $('#vid iframe').title = p.t; $('#mt').textContent = p.t; $('#mr').textContent = p.role; $('#ml').href = p.url;
+  $('#vid iframe').title = p.t; $('#mt').textContent = p.t; $('#mr').textContent = p.role;
   modal.hidden = false; document.body.style.overflow = 'hidden';
 }
 function close(){ modal.hidden = true; $('#vid').innerHTML = ''; document.body.style.overflow = ''; }
